@@ -39,27 +39,17 @@ char* smmObj_getTypeName(int type)
 
 char* smmObj_getGradeName(smmObjGrade_e grade){
       
-	  return (char*)smmGradeName[Grade];
+	  return (char*)smmGradeName[grade];
 }
 
 
-typedef enum smmObjGrade {
-    smmObjGrade_Ap = 0,
-    smmObjGrade_A0,
-    smmObjGrade_Am,
-    smmObjGrade_Bp,
-    smmObjGrade_B0,
-    smmObjGrade_Bm,
-    smmObjGrade_Cp,
-    smmObjGrade_C0,
-    smmObjGrade_Cm
-} smmObjGrade_e;
+
 
 
 //1. 구조체의 형식 정의 
 typedef struct smmObject {
        char name[MAX_CHARNAME];
-       smmObjType_e objType; 
+       smmObjType_t objType; 
        int type;
        int credit;
        int energy;
@@ -78,7 +68,7 @@ typedef struct smmObject {
 //3. 관련 함수 변경 
 //object generation
 
-void* smmObj_genObject(char* name, smmObjType_e objType, int type, int credit, int energy, smmObjGrade_e grade)
+void* smmObj_genObject(char* name, smmObjType_t objType, int type, int credit, int energy, smmObjGrade_e grade)
 {    
     smmObject_t* ptr;
     
@@ -123,30 +113,11 @@ int smmObj_getNodeEnergy(void* obj)
     return ptr->energy;
 }
 
-
-#if 0
-
-
-//member retrieving
-
-
-
-//element to string
-char* smmObj_getNodeName(smmNode_e type)
-int smmObj_getNodeCredit(int node_nr)
+int smmObj_getNodeGrade(void* obj)
 {
-    return smmNodeName[type];
-    return smm_node[node_nr].credit;
+	smmObject_t* ptr = (smmObject_t*)obj;
+    return ptr->grade;
 }
-
-char* smmObj_getGradeName(smmGrade_e grade)
-int smmObj_getNodeEnergy(int node_nr)
-{
-    return smmGradeName[grade];
-    return smm_node[node_nr].energy;
-}
-
-#endif
 
 
 

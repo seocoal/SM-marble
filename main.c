@@ -14,7 +14,7 @@ static int board_nr;
 static int food_nr;
 static int festival_nr;
 
-static int plater_nr;
+static int player_nr;
 
 
 typedef struct player{
@@ -54,7 +54,7 @@ void printGrades(int player) //print grade history of the player
 	for(i=0;i<smmdb_len(LISTNO_OFFSET_GRADE + player); i++)
 	{
 		gradePtr = smmdb_getData(LISTNO_OFFSET_GRADE + player, i);
-		printf("%s : %i\n", smmObj_getNodeName(gradePtr), smmobj_getNodeGrade(gradePtr));
+		printf("%s : %i\n", smmObj_getNodeName(gradePtr), smmObj_getNodeGrade(gradePtr));
 	}
 }
 
@@ -128,11 +128,11 @@ void actionNode(int player)
         //case lecture:
         case SMMNODE_TYPE_LECTURE:
              if 
-            cur_player[player].accumCredit += smmObj_getNodeCredit( cur_player[player].position );
-            cur_player[player].energy -= smmObj_getNodeEnergy( cur_player[player].position );
+            (cur_player[player].accumCredit += smmObj_getNodeCredit( boardPtr ));
+            (cur_player[player].energy -= smmObj_getNodeEnergy( boardPtr ));
              
             //grade generation
-            gradePtr = smmObj_genObject(name, smmObjType_grade, 0, smmObj_getNodeCredit( boardPtr ), 0, ??);
+            gradePtr = smmObj_genObject(name, smmObjType_grade, 0, smmObj_getNodeCredit( boardPtr ), 0, 0);
             smmdb_addTail(LISTNO_OFFSET_GRADE + player, gradePtr);
             
             break;
@@ -150,19 +150,19 @@ void goForward(int player, int step)
      
      printf("%s go to node %i (name: %s)\n", 
                 cur_player[player].name, cur_player[player].position,
-                smmObj_getNodeName(boardPtr);
+                smmObj_getNodeName(boardPtr));
 }
 
+#if 0
 void isGraduated(int player_nr){
-	for(int i=0; i< player_nr, ++i){
 	
 	   if (accumCredit>=GRADUATE_CREDIT){
-	     	printf("Player %d has graduated! \n", i+1);
+	     	printf("Player %d has graduated! \n");
 		    return 1;
 	    }
+	    return 0;
     }
-	return 0;
-}
+#endif
 
 int main(int argc, const char * argv[]) {
     
@@ -220,7 +220,7 @@ int main(int argc, const char * argv[]) {
     //printf("(%s)", smmObj_getTypeName(SMMNODE_TYPE_LECTURE));
     
     
-    # if 0
+    #if 0
     //2. food card config 
     if ((fp = fopen(FOODFILEPATH,"r")) == NULL)
     {
@@ -269,7 +269,7 @@ int main(int argc, const char * argv[]) {
     fclose(fp);
     printf("Total number of festival cards : %i\n", festival_nr);
     
-    # end if
+    #endif
     
     for (i=0; i<festival_nr; i++){
     	void *boardObj = smmdb_getData(LISTNO_FESTCARD, i);
@@ -314,9 +314,7 @@ int main(int argc, const char * argv[]) {
         actionNode(turn);
         
         //4-5. check for game over condition
-        if (isGraduated(turn)){
-        	break;
-		}
+        
         
         
         //4-6. next turn
