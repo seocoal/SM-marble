@@ -11,13 +11,14 @@
 
 #define SMMNODE_TYPE_MAX                7
 
+//노드타입의 열거형으로 정의 
 typedef enum smmObjType {
     smmObjType_board = 0,
     smmObjType_card,
     smmObjType_grade
-} smmObjType_t;
+} smmObjType_e;
 
-
+// 학점의 열거형으로 정의 
 typedef enum smmObjGrade {
     smmObjGrade_Ap = 0,
     smmObjGrade_A0,
@@ -29,7 +30,6 @@ typedef enum smmObjGrade {
     smmObjGrade_C0,
     smmObjGrade_Cm
 } smmObjGrade_e;
-
 
 /* node type :
     lecture,
@@ -57,7 +57,7 @@ typedef enum smmObjGrade {
 
 
 //object generation
-void* smmObj_genObject(char* name, smmObjType_t objType, int type, int credit, int energy, smmObjGrade_e grade);
+void* smmObj_genObject(char* name, smmObjType_e objType, int type, int credit, int energy, smmObjGrade_e grade);
 
 
 //member retrieving
