@@ -9,14 +9,14 @@
 #define FESTFILEPATH "marbleFestivalConfig.txt"
 
 
-//board configuration parameters
+//board configuration parameters(보드 설정 관련 매개변수들) 
 static int board_nr;
 static int food_nr;
 static int festival_nr;
 
 static int player_nr;
 
-
+// 플레이어의 구조체 정의 
 typedef struct player{
 	    int energy;
 	    int position;
@@ -27,6 +27,7 @@ typedef struct player{
 
 static player_t*cur_player;
 // static player_t cur_player[MAX_PLAYER]; 
+
 
 #if 0
 static int player_energy[MAX_PLAYER];
@@ -47,7 +48,7 @@ void printGrades(int player); //print all the grade history of the player
 
 
 
-void printGrades(int player) //print grade history of the player
+void printGrades(int player) //print grade history of the player 
 {
 	int i;
 	void *gradePtr;
@@ -62,6 +63,7 @@ void printPlayerStatus(void) //print all player status at the beginning of each 
 {
      int i;
      
+     printf("---------------BOARD STATUS---------------\n");
      for (i=0;i<player_nr;i++)
      {
          printf("%s : credit %i, energy %i, position %i\n", 
@@ -70,6 +72,8 @@ void printPlayerStatus(void) //print all player status at the beginning of each 
                       cur_player[i].energy,
                       cur_player[i].position);
      }
+     printf("---------------BOARD STATUS---------------\n");
+     
 }
 
 void generatePlayers(int n, int initEnergy) //generate a new player
@@ -97,7 +101,8 @@ void generatePlayers(int n, int initEnergy) //generate a new player
      }
 }
 
-int rolldie(int player)
+
+int rolldie(int player) // 주사위 굴리기 
 {
     char c;
     printf(" Press any key to roll a die (press g to see grade): ");
@@ -111,6 +116,7 @@ int rolldie(int player)
     
     return (rand()%MAX_DIE + 1);
 }
+
 
 
 //action code when a player stays at a node
@@ -142,6 +148,8 @@ void actionNode(int player)
     }
 }
 
+
+
 void goForward(int player, int step)
 {
      void *boardPtr;
@@ -153,6 +161,8 @@ void goForward(int player, int step)
                 smmObj_getNodeName(boardPtr));
 }
 
+
+
 #if 0
 void isGraduated(int player_nr){
 	
@@ -163,6 +173,8 @@ void isGraduated(int player_nr){
 	    return 0;
     }
 #endif
+
+
 
 int main(int argc, const char * argv[]) {
     
@@ -220,7 +232,8 @@ int main(int argc, const char * argv[]) {
     //printf("(%s)", smmObj_getTypeName(SMMNODE_TYPE_LECTURE));
     
     
-    #if 0
+ 
+#if 0
     //2. food card config 
     if ((fp = fopen(FOODFILEPATH,"r")) == NULL)
     {
@@ -232,7 +245,7 @@ int main(int argc, const char * argv[]) {
     while (fscanf(fp, "%s %i", name, &energy)==2) //read a food parameter set
     {
         //store the parameter set
-        void *boardObj= smmfood_genObject(name, 0, 0, 0 energy, 0);
+        void *boardObj= smmobj_genObject(name, 0, 0, 0, energy, 0);
         smmdb_addTail(LISTNO_FOODCARD, boardObj);
         food_nr++;
         
@@ -244,7 +257,7 @@ int main(int argc, const char * argv[]) {
     {
     	 void *boardObj = smmdb_getData(LISTNO_FOODCARD, i);
         
-        printf("node %i : energy %i\n", 
+        printf("node %i :name %s, energy %i\n", 
                      i, smmObj_getNodeName(boardObj),  smmObj_getNodeEnergy(boardObj));
 	}
     
@@ -258,10 +271,10 @@ int main(int argc, const char * argv[]) {
     }
     
     printf("\n\nReading festival card component......\n");
-    while () //read a festival card string
+    while (fscanf(fp, "%s", name)==1) //read a festival card string
     {
         //store the parameter set
-        void *boarObj = smmObj_genObject(name, 0,0,0,0,0);
+        void *boardObj = smmObj_genObject(name, 0,0,0,0,0);
         smmdb_addTail(LISTNO_FESTCARD, boardObj);
         festival_nr++;
         
@@ -269,7 +282,7 @@ int main(int argc, const char * argv[]) {
     fclose(fp);
     printf("Total number of festival cards : %i\n", festival_nr);
     
-    #endif
+    
     
     for (i=0; i<festival_nr; i++){
     	void *boardObj = smmdb_getData(LISTNO_FESTCARD, i);
@@ -277,7 +290,7 @@ int main(int argc, const char * argv[]) {
     	
 	}
     
-    
+#endif
     
     //2. Player configuration ---------------------------------------------------------------------------------
 
@@ -302,6 +315,7 @@ int main(int argc, const char * argv[]) {
         
         //4-1. initial printing
         printPlayerStatus();
+        
         
         //4-2. die rolling (if not in experiment)
         die_result=rolldie(turn);
